@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, Alert } from 'react-native'
+import { StyleSheet, Text, View, Alert, Image } from 'react-native'
 import {TouchableOpacity} from 'react-native-gesture-handler'
+import Flag from '../pictures/red-flag.png'
 import {CELL_STATUS} from './Constants'
 
 // https://math.stackexchange.com/questions/389619/probability-in-minesweeper
@@ -17,11 +18,21 @@ const RevealedMine = ({size}) => {
 	return <View style={[styles.revealedMine, {width: size, height: size}]}/>
 }
 
-const StandardCell = ({size, lost, onCellReveal, flag}) => {
+const StandardCell = ({size, lost, onCellReveal, flag, qmark}) => {
 	return(
-		<TouchableOpacity disabled={lost || flag} onPress={onCellReveal}>
+		<TouchableOpacity disabled={lost} onPress={onCellReveal}>
 			<View style={[styles.cell, {width: size, height: size}]}>
-				{flag && (<Text>F</Text>)}
+				{flag && (
+					<Image
+						resizeMethod='scale'
+						resizeMode='cover'
+						style={styles.flagPicture}
+						source={Flag}
+					/>
+				)}
+				{qmark && (
+					<Text>?</Text>
+				)}
 			</View>
 		</TouchableOpacity>
 	)
@@ -49,16 +60,6 @@ function getNumberColor(number){
 }
 
 const Cell = ({size, status, isMine, neighbors, lost, onReveal}) => {
-
-	// TODO: This should not be here.
-//	const onCellReveal = () => {
-//		if(status === CELL_STATUS.CLEARED){ return }
-//		if (!isMine) {
-//			onReveal()
-//		} else {
-//			onLose()
-//		}
-//	}
 
 	if(lost && isMine){
 		return <RevealedMine size={size}/>
@@ -88,6 +89,7 @@ const Cell = ({size, status, isMine, neighbors, lost, onReveal}) => {
 			lost={lost}
 			onCellReveal={onReveal}
 			flag={CELL_STATUS.FLAGED === status}
+			qmark={CELL_STATUS.QMARKED === status}
 		/>
 	)
 }
@@ -116,6 +118,10 @@ const styles = StyleSheet.create({
 		borderColor: '#7d7d7d',
 		alignItems: 'center',
 		justifyContent: 'center'
+	},
+	flagPicture: {
+		height: 15,
+		width: 15,
 	},
 })
 

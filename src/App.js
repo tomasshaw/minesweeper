@@ -10,8 +10,15 @@ import {TouchableOpacity, ScrollView} from 'react-native-gesture-handler'
 // INTERMEDIATE: 16x16 - 40 mines
 // EXPERT: 16x30 - 99 mines
 
+//TODO:
+// -Checkear victoria
+// -Seleccionar dificultad
+// -Seleccionar tamanio
+// - ESTILOS ESTILOS ESTILOS centrar mil cosas
+// -if flagged&&isMine&&lost => icono_wrong_mine
+
 const App = () => {
-	const [difficulty, setDifficulty] = useState(DIFFICULTY_MAP.HARD)
+	const [difficulty, setDifficulty] = useState(DIFFICULTY_MAP.EASY)
 	const [boardSize, setBoardSize] = useState(DEFAULT_BOARD_SIZE)
 	const [boardWidth, setBoardWidth] = useState(CELL_SIZE * DEFAULT_BOARD_SIZE)
 	const [reset, setReset] = useState(false)
@@ -20,11 +27,18 @@ const App = () => {
 	const onLose = () => {
 		Alert.alert('Alpiste perdiste')
 		setLost(true)
-		//setReset(!reset)
+	}
+	const handleOnNewGame = () => {
+		setReset(!reset)
+		setLost(false)
+		setMode(MODES.CLEAR)
 	}
 	return (
 		<View style={styles.container}>
-			<Button title="New Game" onPress={() => {setReset(!reset); setLost(false)}} />
+			<Button title="New Game" onPress={() => handleOnNewGame()} />
+			<Text> </Text>
+			<Text>Current Mode: {mode}</Text>
+			<Text>Current Difficulty: {difficulty}</Text>
 			<Text> </Text>
 			{/* Why does this have to be implemented this way, its horrible, i wanna go back
 				to standard webDev I love Chrome and my 64gb's of ram */}

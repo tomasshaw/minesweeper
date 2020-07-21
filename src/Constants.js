@@ -3,7 +3,7 @@ export const CELL_SIZE = 30
 export const DEFAULT_BOARD_SIZE = 10
 
 export const MODES = {
-	CLEAR: 'CLEAR',
+	CLEAR: 'NORMAL',
 	FLAG: 'FLAG',
 	QMARK: 'QMARK'
 }
@@ -24,5 +24,6 @@ export const DIFFICULTY_MAP = {
 export const ACTION_TYPES = {
 	REVEAL: 'REVEAL',
 	FLAG: 'FLAG',
-	reset: 'RESET',
+	QMARK: 'QMARK',
+	RESET: 'RESET',
 }

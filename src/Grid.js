@@ -20,12 +20,27 @@ function newGrid(difficulty, boardSize){
 
 function boardReducer(state, action){
 	switch(action.type){
-		case ACTION_TYPES.REVEAL:
+		case ACTION_TYPES.REVEAL: {
 			return checkNeighbors(state, action.payload)
-		case ACTION_TYPES.FLAG:
+		}
+		case ACTION_TYPES.FLAG: {
 			const {x, y} = action.payload
-			state[x][y].status = CELL_STATUS.FLAGED
+			if(state[x][y].status === CELL_STATUS.FLAGED){
+				state[x][y].status = CELL_STATUS.NONE
+			} else {
+				state[x][y].status = CELL_STATUS.FLAGED
+			}
 			return [...state]
+		}
+		case ACTION_TYPES.QMARK: {
+			const {x, y} = action.payload
+			if(state[x][y].status === CELL_STATUS.QMARKED){
+				state[x][y].status = CELL_STATUS.NONE
+			} else {
+				state[x][y].status = CELL_STATUS.QMARKED
+			}
+			return [...state]
+		}
 		case ACTION_TYPES.RESET:
 			return action.payload
 		default:
@@ -51,6 +66,12 @@ const Grid = ({boardSize, boardWidth, onLose, reset, difficulty, mode, ...rest})
 	const handleOnReveal = ({x, y}) => {
 		switch(mode){
 			case(MODES.CLEAR):
+				if(
+					boardState[x][y].status === CELL_STATUS.FLAGED ||
+					boardState[x][y].status === CELL_STATUS.QMARKED
+				){
+					return
+				}
 				if(boardState[x][y].isMine){ onLose(); return }
 				dispatchBoard({type: ACTION_TYPES.REVEAL, payload: {x, y}})
 				break;
@@ -58,6 +79,7 @@ const Grid = ({boardSize, boardWidth, onLose, reset, difficulty, mode, ...rest})
 				dispatchBoard({type: ACTION_TYPES.FLAG, payload: {x, y}})
 				break;
 			case(MODES.QMARK):
+				dispatchBoard({type: ACTION_TYPES.QMARK, payload: {x, y}})
 				break;
 			default:
 				break;
@@ -83,7 +105,10 @@ const Grid = ({boardSize, boardWidth, onLose, reset, difficulty, mode, ...rest})
 		})
 
 		return (
-			<View key={rowId} style={{ width: boardWidth, height: CELL_SIZE, flexDirection: 'row'}}>
+			<View
+				key={rowId}
+				style={{ width: boardWidth, height: CELL_SIZE, flexDirection: 'row'}}
+			>
 				{cellList}
 			</View>
 		)

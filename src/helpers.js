@@ -23,7 +23,12 @@ function revealNeighbors(currBoard, {x, y}){
 				&& (i != 0 || j != 0)
 			){
 				//Mi profesor de funcional llega a ver esta recursividad y me reprueba
-				if(currBoard[x+i][y+j].status === CELL_STATUS.CLEARED){
+				const currStatus = currBoard[x+i][y+j].status
+				if(
+					currStatus === CELL_STATUS.CLEARED ||
+					currStatus === CELL_STATUS.FLAGED ||
+					currStatus === CELL_STATUS.QMARKED
+				){
 					continue
 				}
 				currBoard[x+i][y+j].status = CELL_STATUS.CLEARED
